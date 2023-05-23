@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', isset($pageTitle) ? $pageTitle : 'Welcome to Blog')
+
 @section('meta_tags')
     <meta name="robots" content="index,follow, max-snippet:-1, max-large-preview:large, max-video-preview:-1" />
     <meta name="title" content="{{ Str::ucfirst($post->post_title) }}" />
@@ -51,35 +52,37 @@
                             alt="post-thumb" />
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-9 mx-auto">
-                        <div class="content">
-                            <h5 class="paragraph"></h5>
-                            <p>{!! $post->post_content !!}</p>
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-md-9 mx-auto">
+                            <div class="content">
+                                <h5 class="paragraph"></h5>
+                                <p>{!! $post->post_content !!}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-3 mx-auto">
-                        <!-- categories -->
-                        <div class="widget">
-                            <h5 class="widget-title"><span>Categories</span></h5>
-                            @if (categories())
-                                @foreach (categories() as $category)
+                        <div class="col-md-3 mx-auto">
+                            <!-- categories -->
+                            <div class="widget">
+                                <h5 class="widget-title"><span>Categories</span></h5>
+                                @if (categories())
+                                    @foreach (categories() as $category)
+                                        <ul class="list-unstyled widget-list">
+                                            <li>
+                                                <a href="{{ route('category_posts', $category->slug) }}" class="d-flex">
+                                                    {{ Str::ucfirst($category->subcategory_name) }}
+                                                    <small class="ml-auto">({{ $category->posts->count() }})</small>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    @endforeach
+                                @else
                                     <ul class="list-unstyled widget-list">
                                         <li>
-                                            <a href="{{ route('category_posts', $category->slug) }}" class="d-flex">
-                                                {{ Str::ucfirst($category->subcategory_name) }}
-                                                <small class="ml-auto">({{ $category->posts->count() }})</small>
-                                            </a>
+                                            <a href="#!" class="d-flex">There No Categories..!</a>
                                         </li>
                                     </ul>
-                                @endforeach
-                            @else
-                                <ul class="list-unstyled widget-list">
-                                    <li>
-                                        <a href="#!" class="d-flex">There No Categories..!</a>
-                                    </li>
-                                </ul>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,17 +97,17 @@
                                         <li class="media widget-post align-items-center">
                                             <a href="{{ route('read_post', $item->post_slug) }}">
                                                 <img loading="lazy" class="mr-3"
-                                                    src="{{ asset('/storage/uploads/posts/thumbnails/thumb_'.$item->featured_image) }}"
+                                                    src="{{ asset('/storage/uploads/posts/thumbnails/thumb_' . $item->featured_image) }}"
                                                     alt="Post Thumbnail">
                                             </a>
                                             <div class="media-body">
                                                 <h5 class="h6 mb-0">
-                                                    <a
-                                                        href="{{ route('read_post', $item->post_slug) }}">
+                                                    <a href="{{ route('read_post', $item->post_slug) }}">
                                                         {{ $item->post_title }}
                                                     </a>
                                                 </h5>
-                                                <p class="post_content mb-0">{{ Str::ucfirst(words($item->post_content, 25)) }}</p>
+                                                <p class="post_content mb-0">
+                                                    {{ Str::ucfirst(words($item->post_content, 25)) }}</p>
                                                 <small>{{ date_formatter($post->created_at) }}</small>
                                             </div>
                                         </li>
@@ -118,3 +121,28 @@
         </div>
     </section>
 @endsection
+
+
+@push('stylesheets')
+    <link rel="stylesheet" href="/share_buttons/jquery.floating-social-share.min.css" />
+@endpush
+
+@push('scripts')
+    <script src="/share_buttons/jquery.floating-social-share.min.js"></script>
+    <script>
+        $("body").floatingSocialShare({
+            buttons: [
+                "facebook",
+                "twitter",
+                "linkedin",
+                "pinterest",
+                "reddit",
+                "whatsapp",
+                "reddit",
+                "telegram"
+            ],
+            text: "share with:",
+            url: "{{ route('read_post', $post->post_slug) }}"
+        });
+    </script>
+@endpush

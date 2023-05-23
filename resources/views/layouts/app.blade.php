@@ -28,7 +28,7 @@
 
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/css/style.css') }}">
-
+    @stack('stylesheets')
     <!--Favicon-->
     <link rel="shortcut icon" href="{{ asset(blogInfo()->blog_logo) }}" type="image/x-icon">
     <link rel="icon" href="{{ asset(blogInfo()->blog_logo) }}" type="image/x-icon">
@@ -49,9 +49,9 @@
 
     <!-- JS Plugins -->
     <script src="{{ asset('assets/frontend/plugins/jQuery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/frontend/plugins/bootstrap/bootstrap.min.js') }}" async></script>
+    <script src="{{ asset('assets/frontend/plugins/bootstrap/bootstrap.min.js') }}"></script>
+    @stack('scripts')
     <script src="{{ asset('assets/frontend/plugins/slick/slick.min.js') }}"></script>
-
     <!-- Main Script -->
     <script src="{{ asset('assets/frontend/js/script.js') }}"></script>
 </body>
