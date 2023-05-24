@@ -54,13 +54,13 @@
                 </div>
                 <div class="col-lg-12">
                     <div class="row">
-                        <div class="col-md-9 mx-auto">
+                        <div class="col-md-8 mx-auto">
                             <div class="content">
                                 <h5 class="paragraph"></h5>
                                 <p>{!! $post->post_content !!}</p>
                             </div>
                         </div>
-                        <div class="col-md-3 mx-auto">
+                        <div class="col-md-4 mx-auto">
                             <!-- categories -->
                             <div class="widget">
                                 <h5 class="widget-title"><span>Categories</span></h5>
@@ -83,13 +83,35 @@
                                     </ul>
                                 @endif
                             </div>
+                            <!-- latest articles -->
+                            <div class="widget">
+                                <h5 class="widget-title"><span>Latest Articles</span></h5>
+                                <!-- post-item -->
+                                @foreach (latest_sidebar_posts($post->id) as $item)
+                                    <ul class="list-unstyled widget-list">
+                                        <li class="media widget-post align-items-center">
+                                            <a href="{{ route('read_post', $item->post_slug) }}">
+                                                <img loading="lazy" class="mr-3"
+                                                    src="{{ asset('/storage/uploads/posts/thumbnails/thumb_' . $item->featured_image) }}">
+                                            </a>
+                                            <div class="media-body">
+                                                <h5 class="h6 mb-0">
+                                                    <a
+                                                        href="{{ route('read_post', $item->post_slug) }}">{{ $item->post_title }}</a>
+                                                </h5>
+                                                <small>{{ date_formatter($post->created_at) }}</small>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 </div>
                 @if (count($related_posts) > 0)
                     <div class="col-lg-12 col-md-6">
                         <div class="widget">
-                            <h5 class="widget-title"><span>Related Post</span></h5>
+                            <h5 class="widget-title"><span>Related Posts</span></h5>
                             <!-- post-item -->
                             @foreach ($related_posts as $item)
                                 <div class="col-lg-6 col-md-4">
@@ -117,6 +139,31 @@
                         </div>
                     </div>
                 @endif
+                <div class="col-lg-10 max-auto mb-3">
+                    <div id="disqus_thread"></div>
+                    <script>
+                        /**
+                         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                         *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
+                        
+                        var disqus_config = function () {
+                        this.page.url = "{{ route('read_post', $post->post_slug) }}";  // Replace PAGE_URL with your page's canonical URL variable
+                        this.page.identifier = "{{ $post->id }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                        };
+                        
+                        (function() { // DON'T EDIT BELOW THIS LINE
+                            var d = document,
+                                s = d.createElement('script');
+                            s.src = 'https://blog-site-xtdusv51du.disqus.com/embed.js';
+                            s.setAttribute('data-timestamp', +new Date());
+                            (d.head || d.body).appendChild(s);
+                        })();
+                    </script>
+                    <noscript>
+                        Please enable JavaScript to view the
+                        <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                    </noscript>
+                </div>
             </article>
         </div>
     </section>
