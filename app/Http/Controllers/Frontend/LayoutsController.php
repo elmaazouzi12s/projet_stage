@@ -98,4 +98,24 @@ class LayoutsController extends Controller
             return view('layouts.partials.frontend.pages.inc.single_post', $data);
         }
     }
+
+    public function tagPosts(Request $request, $tag)
+    {
+        $posts = Post::where('post_tags', 'LIKE', '%' . $tag . '%')
+            ->with('subcategory')
+            ->with('author')
+            ->orderBy('created_at', 'DESC')
+            ->paginate(6);
+
+        if (!$posts) {
+            toastr()->error('There is no posts related to this tag');
+            return redirect()->back();
+        };
+        $data = [
+            'pageTitle' => $tag,
+            'posts' => $posts
+        ];
+
+        return view('layouts.partials.frontend.pages.inc.tag_posts', $data);
+    }
 }

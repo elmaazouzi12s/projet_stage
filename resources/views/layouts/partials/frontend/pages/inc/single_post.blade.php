@@ -40,10 +40,18 @@
                             Categories : <a href="{{ route('category_posts', $post->subcategory->slug) }}"
                                 class="ml-1">{{ $post->subcategory->parentCategory->category_name }} </a>
                         </li>
-                        <li class="list-inline-item">
-                            Tags <i class="ti-tag"></i> : <a href="#!" class="ml-1">
-                                {{ Str::ucfirst($post->post_tags) }} </a>
-                        </li>
+                        @if ($post->post_tags)
+                            <li class="list-inline-item">
+                                Tags <i class="ti-tag"></i> :
+                                @php
+                                    $postTagsString = $post->post_tags;
+                                    $tagsArray = explode(',', $postTagsString);
+                                @endphp
+                                @foreach ($tagsArray as $tag)
+                                    <a href="{{ route('tag_posts', $tag) }}">#{{$tag}}</a>
+                                @endforeach
+                            </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="col-12 mb-3">
@@ -105,6 +113,24 @@
                                     </ul>
                                 @endforeach
                             </div>
+                            <!-- tags -->
+                            @if (tags_posts())
+                                @php
+                                    $postTagsString = tags_posts();
+                                    $tagsArray = array_unique(explode(',', $postTagsString));
+                                @endphp
+                                <div class="widget">
+                                    <h5 class="widget-title"><span>Tags</span></h5>
+                                    <ul class="list-inline widget-list-inline">
+                                        @foreach ($tagsArray as $tag)
+                                            <li class="list-inline-item">
+                                                <a href="{{ route('tag_posts', $tag) }}"
+                                                    class="tags">#{{ $tag }}</a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -145,12 +171,14 @@
                         /**
                          *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
                          *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-                        
-                        var disqus_config = function () {
-                        this.page.url = "{{ route('read_post', $post->post_slug) }}";  // Replace PAGE_URL with your page's canonical URL variable
-                        this.page.identifier = "{{ $post->id }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+
+                        var disqus_config = function() {
+                            this.page.url =
+                                "{{ route('read_post', $post->post_slug) }}"; // Replace PAGE_URL with your page's canonical URL variable
+                            this.page.identifier =
+                                "{{ $post->id }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
                         };
-                        
+
                         (function() { // DON'T EDIT BELOW THIS LINE
                             var d = document,
                                 s = d.createElement('script');

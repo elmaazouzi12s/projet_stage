@@ -51,9 +51,18 @@
                                             <a href="{{ route('category_posts', $post->subcategory->slug) }}"
                                                 class="ml-1">{{ $post->subcategory->parentCategory->category_name }}</a>
                                         </li>
-                                        <li class="list-inline-item">Tags :
-                                            <a href="#!" class="ml-1">{{ Str::ucfirst($post->post_tags) }} </a>
-                                        </li>
+                                        @if ($post->post_tags)
+                                            <li class="list-inline-item">
+                                                Tags <i class="ti-tag"></i> :
+                                                @php
+                                                    $postTagsString = $post->post_tags;
+                                                    $tagsArray = explode(',', $postTagsString);
+                                                @endphp
+                                                @foreach ($tagsArray as $tag)
+                                                    <a href="{{ route('tag_posts', $tag) }}">#{{ $tag }}</a>
+                                                @endforeach
+                                            </li>
+                                        @endif
                                     </ul>
                                     <p>
                                         {!! Str::ucfirst(words($post->post_content, 25)) !!}
@@ -87,13 +96,15 @@
                             <ul class="list-unstyled widget-list">
                                 <li class="media widget-post align-items-center">
                                     <a href="{{ route('read_post', $item->post_slug) }}">
-                                        <img loading="lazy" class="mr-3" src="{{ asset('/storage/uploads/posts/thumbnails/thumb_' . $item->featured_image) }}">
+                                        <img loading="lazy" class="mr-3"
+                                            src="{{ asset('/storage/uploads/posts/thumbnails/thumb_' . $item->featured_image) }}">
                                     </a>
                                     <div class="media-body">
                                         <h5 class="h6 mb-0">
-                                            <a href="{{ route('read_post', $item->post_slug) }}">{{ $item->post_title }}</a>
+                                            <a
+                                                href="{{ route('read_post', $item->post_slug) }}">{{ $item->post_title }}</a>
                                         </h5>
-                                        <small>{{ date_formatter($post->created_at) }}</small>
+                                        <small>{{ date_formatter($item->created_at) }}</small>
                                     </div>
                                 </li>
                             </ul>
@@ -121,6 +132,24 @@
                             </ul>
                         @endif
                     </div>
+                    <!-- tags -->
+                    @if (tags_posts())
+                        @php
+                            $postTagsString = tags_posts();
+                            $tagsArray = array_unique(explode(',', $postTagsString));
+                            sort($tagsArray);
+                        @endphp
+                        <div class="widget">
+                            <h5 class="widget-title"><span>Tags</span></h5>
+                            <ul class="list-inline widget-list-inline">
+                                @foreach ($tagsArray as $tag)
+                                    <li class="list-inline-item">
+                                        <a href="{{ route('tag_posts', $tag) }}" class="tags">#{{ $tag }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </aside>
             </div>
         </div>

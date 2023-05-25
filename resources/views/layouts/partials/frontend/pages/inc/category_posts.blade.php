@@ -120,6 +120,24 @@
                             </ul>
                         @endif
                     </div>
+                    <!-- tags -->
+                    @if (tags_posts())
+                        @php
+                            $postTagsString = tags_posts();
+                            $tagsArray = array_unique(explode(',', $postTagsString));
+                            sort($tagsArray);
+                        @endphp
+                        <div class="widget">
+                            <h5 class="widget-title"><span>Tags</span></h5>
+                            <ul class="list-inline widget-list-inline">
+                                @foreach ($tagsArray as $tag)
+                                    <li class="list-inline-item">
+                                        <a href="{{ route('tag_posts', $tag) }}" class="tags">#{{ $tag }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                 </aside>
             </div>
         </div>
