@@ -52,7 +52,7 @@
 
     <!-- JS Plugins -->
     <script src="{{ asset('assets/frontend/plugins/jQuery/jquery.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/frontend/plugins/bootstrap/bootstrap.min.js') }}"></script> --}}
+    <script src="{{ asset('assets/frontend/plugins/bootstrap/bootstrap.min.js') }}"></script>
     @stack('scripts')
     <script src="{{ asset('assets/frontend/plugins/slick/slick.min.js') }}"></script>
     <!-- Main Script -->

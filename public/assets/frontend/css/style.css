@@ -317,6 +317,11 @@ a:hover {
   border: 2px solid rgb(196, 187, 187) !important;
 }
 
+.navbar-nav {
+  display: flex !important;
+  align-items: center !important;
+}
+
 .navbar-white .navbar-nav .nav-link {
   color: #1c1d1f!important;
 }
@@ -1249,4 +1254,18 @@ a.post-title-sm:hover {
 .tags {
   text-transform: capitalize;
   font-style: italic;
+}
+
+.link-muted { color: #aaa; } .link-muted:hover { color: #1266f1; }
+
+#comment-icon {
+  font-size: 20px; /* Adjust the size as desired */
+}
+
+#reply-section {
+  margin-left: 5rem;
+}
+
+#show-reply {
+  margin-left: 1rem;
 }

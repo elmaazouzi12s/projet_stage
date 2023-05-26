@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Comment;
+use App\Models\CommentReply;
 use App\Models\Post;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
@@ -88,11 +90,13 @@ class LayoutsController extends Controller
                     }
                 })->inRandomOrder()
                 ->take(3)
-                ->get();;
+                ->get();
+            $comments = Comment::where('post_id', $post->id)->with('post')->get();
             $data = [
                 'pageTitle' => Str::ucfirst($post->post_title),
                 'post' => $post,
                 'related_posts' => $related_posts,
+                'comments' => $comments
             ];
 
             return view('layouts.partials.frontend.pages.inc.single_post', $data);

@@ -59,7 +59,7 @@
                     </li>
                     <!-- Avatar -->
                     @auth
-                        <li class="nav-item dropdown my-auto">
+                        <li class="nav-item dropdown mb-3 my-auto">
                             <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
                                 id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
                                 <img src="{{ asset(Auth::user()->picture) }}" class="rounded-circle avatar" height="25"

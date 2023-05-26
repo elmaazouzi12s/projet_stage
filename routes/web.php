@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Auth\Author\AuthorController;
+use App\Http\Controllers\Auth\Author\CommentController;
 use App\Http\Controllers\Auth\Author\GeneralSettingsController;
 use App\Http\Controllers\Auth\Author\PostController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -42,6 +43,9 @@ Route::controller(LayoutsController::class)->group(function () {
     Route::get('/search', 'searchBlog')->name('search_posts');
 });
 
+Route::post('/article/comment/{post}', [CommentController::class, 'postComment'])->name('post.comment');
+Route::post('/article/reply/{comment}', [CommentController::class, 'postCommentReply'])->name('post.reply');
+
 Route::middleware(['guest'])->group(function () {
     /**
      * Register Routes
@@ -78,7 +82,6 @@ Route::middleware('auth')->group(function () {
     Route::prefix('author')->name('author.')->group(function () {
         Route::get('/profile', [AuthorController::class, "index"])->name("profile");
         Route::post('/profile', [AuthorController::class, "update"])->name("profile.update");
-
 
         Route::prefix('posts')->name('posts.')->group(function () {
             Route::get('/add-post', [PostController::class, 'index'])->name('add-post');

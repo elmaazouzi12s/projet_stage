@@ -134,11 +134,12 @@ if (!function_exists('latest_sidebar_posts')) {
 
 /** SEND EMAIL USING PHP MAILER */
 if (!function_exists('sendMail')) {
-    function sendMail($mailConfig) {
+    function sendMail($mailConfig)
+    {
         require 'PHPMailer/src/Exception.php';
         require 'PHPMailer/src/PHPMailer.php';
         require 'PHPMailer/src/SMTP.php';
-        
+
         $mail = new PHPMailer(true);
         $mail->SMTPDebug = 0;
         $mail->isSMTP();
@@ -170,5 +171,16 @@ if (!function_exists('tags_posts')) {
     function tags_posts()
     {
         return Post::where('post_tags', '!=', null)->distinct()->pluck('post_tags')->join(',');
+    }
+}
+
+/**
+ *  Display a date in the format of "X hours ago"
+ */
+if (!function_exists('formatTimeAgo')) {
+    function formatTimeAgo($date)
+    {
+        $timeAgo = Carbon::parse($date)->diffForHumans();
+        return $timeAgo;
     }
 }
