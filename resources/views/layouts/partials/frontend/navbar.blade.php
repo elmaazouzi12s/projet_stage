@@ -105,11 +105,19 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
                         <li>
-                            <a class="dropdown-item" href="#" aria-disabled="true">{{ auth()->user()->username }}</a>
+                            <a class="dropdown-item" href="#" aria-disabled="true"
+                                aria-disabled="true">{{ auth()->user()->username }}</a>
                         </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('author.profile') }}">My profile</a>
-                        </li>
+
+                        @if (Auth::check() && Auth::user()->role == 'admin')
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.profile') }}">My profile</a>
+                            </li>
+                        @else
+                            <li>
+                                <a class="dropdown-item" href="{{ route('author.profile') }}">My profile</a>
+                            </li>
+                        @endif
                         @if (Auth::check() && Auth::user()->role == 'admin')
                             <li>
                                 <a class="dropdown-item" href="{{ route('admin.settings') }}">Settings</a>

@@ -19,13 +19,14 @@
     <meta name="twitter:description" content="{{ Str::ucfirst(words($post->post_content, 120)) }}" />
     <meta name="twitter:image"
         content="{{ asset('/storage/uploads/posts/thumbnails/resized_' . $post->featured_image) }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 
 @section('content')
     <section class="section">
         <div class="container">
             <article class="row mb-4">
-                <div class="col-lg-10 mx-auto mb-4">
+                <div class="col-lg-10 mx-auto">
                     <h1 class="h2 mb-3">
                         {{ $post->post_title }}
                     </h1>
@@ -53,6 +54,25 @@
                             </li>
                         @endif
                     </ul>
+                </div>
+                <div class="col-lg-10 mx-auto mb-4 bookmark-icon">
+                    <form id="myForm" method="POST">
+                        @csrf
+                        <input type="hidden" value="{{ $post->id }}" id="postBookmark" />
+                        <button class="bookmark mx-auto" type="submit">
+                            <div class="icon">
+                                <svg viewBox="0 0 36 36">
+                                    <path class="filled"
+                                        d="M26 6H10V18V30C10 30 17.9746 23.5 18 23.5C18.0254 23.5 26 30 26 30V18V6Z" />
+                                    <path class="default"
+                                        d="M26 6H10V18V30C10 30 17.9746 23.5 18 23.5C18.0254 23.5 26 30 26 30V18V6Z" />
+                                    <path class="corner"
+                                        d="M10 6C10 6 14.8758 6 18 6C21.1242 6 26 6 26 6C26 6 26 6 26 6H10C10 6 10 6 10 6Z" />
+                                </svg>
+                            </div>
+                            <span>Bookmark</span>
+                        </button>
+                    </form>
                 </div>
                 <div class="col-12 mb-3">
                     <div class="post-slider">
@@ -334,6 +354,7 @@
 
 @push('stylesheets')
     <link rel="stylesheet" href="/share_buttons/jquery.floating-social-share.min.css" />
+    @vite(['resources/css/app.css'])
 @endpush
 
 @push('scripts')
@@ -393,5 +414,41 @@
                 }
             });
         })
+    </script>
+@endpush
+
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#myForm').submit(function(event) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                event.preventDefault(); // Prevent form submission
+
+                var post = $('#postBookmark').val();
+
+                $.ajax({
+                    url: "{{ route('author.posts.bookmark-post') }}",
+                    type: 'POST',
+                    data: {
+                        post: post
+                    },
+                    success: function(response) {
+                        // Handle the response from the server
+                        if (response.status == 'success') {
+                           console.log('Post saved');
+                        }
+                        // You can update the page content or perform other actions as needed
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            });
+        });
     </script>
 @endpush

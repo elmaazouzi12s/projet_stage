@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\UserVerifyController;
 use App\Http\Controllers\Frontend\LayoutsController;
+use App\Http\Livewire\Bookmark;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -90,6 +91,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/edit-post', [PostController::class, 'editPost'])->name('edit-post');
             Route::post('/update-post', [PostController::class, 'updatePost'])->name('update-post');
             Route::put('/delete-post', [PostController::class, 'destroyPost'])->name('delete-post');
+            Route::post('/bookmark', [PostController::class, 'saveArticle'])->name('bookmark-post');
         });
     });
 });
@@ -102,6 +104,8 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [DashboardController::class, 'profile'])->name('profile');
+    Route::post('/profile', [DashboardController::class, 'update'])->name('profile.update');
     Route::get('/settings', [GeneralSettingsController::class, 'index'])->name("settings");
     Route::post('/settings', [GeneralSettingsController::class, 'update'])->name("settings.update");
     Route::post('/settings/logo', [GeneralSettingsController::class, 'changeBlogLogo'])->name("change-blog-logo");

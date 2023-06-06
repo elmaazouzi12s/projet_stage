@@ -14,7 +14,7 @@
                 <ul class="navbar-nav ml-auto">
                     @if (Auth::check() && Auth::user()->role == 'admin')
                         <li class="new-item">
-                            
+
                             <a class="nav-link d-flex gap-2" href="{{ route('admin.dashboard') }}">
                                 <i class="ti-panel my-auto"></i>
                                 Dashboard
@@ -27,23 +27,25 @@
                             Categories <i class="ti-angle-down ml-1"></i>
                         </a>
                         <div class="dropdown-menu">
-                            @foreach (category() as $category)
-                                <a class="dropdown-item"
-                                    href="{{ route('category_posts', $category->category_name) }}">{{ $category->category_name }}</a>
-                            @endforeach
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            SubCategories <i class="ti-angle-down ml-1"></i>
-                        </a>
-                        <div class="dropdown-menu">
                             @foreach (\App\Models\SubCategory::whereHas('posts')->orderby('ordering', 'ASC')->get() as $subcategory)
                                 <a class="dropdown-item"
                                     href="{{ route('category_posts', $subcategory->slug) }}">{{ $subcategory->subcategory_name }}</a>
                             @endforeach
                         </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="#" id="navbarDropdown" role="button"
+                            aria-expanded="false">
+                            Posts
+                            <i class="ti-angle-down ml-1"></i>
+                        </a>
+                        <!-- Dropdown menu -->
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('author.posts.add-post') }}">Add new
+                                    Post</a>
+                            </li>
+                        </ul>
                     </li>
                     @foreach (\App\Models\SubCategory::where('parent_category', 0)->whereHas('posts')->orderby('ordering', 'ASC')->get() as $subcategory)
                         <li class="nav-item">
@@ -69,7 +71,11 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item py-0" href=""
                                     aria-disabled="true">{{ auth()->user()->username }}</a>
-                                <a class="dropdown-item py-0" href="{{ route('author.profile') }}">My profile</a>
+                                @if (Auth::user()->role == 'admin')
+                                    <a class="dropdown-item py-0" href="{{ route('admin.profile') }}">My profile</a>
+                                @else
+                                    <a class="dropdown-item py-0" href="{{ route('author.profile') }}">My profile</a>
+                                @endif
                                 @if (Auth::check() && Auth::user()->role == 'admin')
                                     <a class="dropdown-item py-0" href="{{ route('admin.settings') }}">Settings</a>
                                 @endif
